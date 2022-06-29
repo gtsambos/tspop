@@ -8,6 +8,9 @@ setup(
 	name = 'tspop',
 	version = '0.0.1',
 	description = 'Extracts population-based ancestry from simulated tree sequence datasets.',
+	url = "https://github.com/gtsambos/tspop",
+	author = "Georgia Tsambos",
+	author_email = "g.tsambos@gmail.com",
 	py_modules = ["tspop"],
 	package_dir = {'' : 'src'},
 	classifiers = [
@@ -21,7 +24,8 @@ setup(
 	long_description = long_description,
 	long_description_content_type = "text/x-rst",
 	install_requires = [
-		"tskit>=0.2.3"
+		"tskit>=0.2.3",
+		"pandas>=1.0.0"
 	],
 	extras_require = {
 		"dev" : ["pytest>=3.7",
