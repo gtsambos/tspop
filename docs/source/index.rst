@@ -72,10 +72,10 @@ Basic usage
 
 .. _simulationsetup:
 
-Simulation setup
-================
+:doc:`simulationsetup`
 
-.. _ideas:
+The ideas behind ``tspop``
+==========================
 
 :doc:`ideas`
 

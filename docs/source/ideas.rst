@@ -1,3 +1,5 @@
+.. _ideas:
+
 The ideas behind ``tspop``
 ==========================
 
