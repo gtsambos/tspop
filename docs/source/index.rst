@@ -2,33 +2,87 @@
 About ``tspop``
 ===============
 
-``tspop`` lets you extract information about population-based ancestry
-from tree sequences simulated with ``msprime``.
+This is the documentation for ``tspop``,
+a lightweight package that helps you extract information about population-based ancestry
+from tree sequences simulated with ``msprime`` and ``SLiM``.
 
-Quickstart
-==========
+.. todo::
+	Add link to preprint/note when it's written.
 
-.. note::
-   Do later.
+We designed ``tspop`` to make it easier for you to extract information
+about population-based ancestry in simulated genetic datasets.
+Under the hood, ``tspop`` relies on
 
-Installation
-------------
+  * the ``tskit`` package to efficiently extract the population-based information in the simulated datasets
+  * the ``pandas`` package to provide user-friendly, interpretable output
 
-.. note::
-   Do later.
-
-Basic usage
+First steps
 -----------
 
+  * Head to the :ref:`installation` page to install ``tspop`` on your computer.
+  * Population-based ancestry is **not well-defined** unless you have a notion of times and epochs in your simulated demographic scenarios. Read :ref:`simulationsetup` to see how to design your simulations to ensure they will work with ``tspop``.
+  * Flick through the :ref:`examples` to see ``tspop`` in action.
+  * Check out :ref:`ideas` to learn more about why ``tspop`` is so efficient.
+
+.. _installation:
+
+Installation
+============
+
+``tspop`` will soon be available on `PyPi <https://pypi.org/>`_ for
+installation with ``pip``. Until then, you can use it locally by
+cloning the ``git`` repository,
+
+```bash
+
+$ git clone https://github.com/gtsambos/tspop
+```
+
+navigating into the root directory,
+
+```bash
+
+$ cd tspop
+```
+
+and installing it like this:
+
+```bash
+
+$ pip install -e
+```
+
+Developer installation
+----------------------
+
+To install ``tspop`` in addition to the packages needed to develop and run tests,
+perform the first two steps above in your virtual environment,
+then run the following command:
+
+```bash
+
+$ pip install -e .[dev]	
+
+```
+
+
+Basic usage
+===========
+
 .. note::
    Do later.
 
-Developing with ``tspop``
-=========================
+.. _simulationsetup:
 
-To install ``tspop`` as well as the packages needed to develop and run
-tests, run this in the ``virtualenv``:
+Simulation setup
+================
 
-```bash
-$ pip install -e .[dev]	
-```
+.. _ideas:
+
+The ideas behind ``tspop``
+==========================
+
+.. _examples:
+
+Examples
+========

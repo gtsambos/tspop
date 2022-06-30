@@ -3,8 +3,8 @@
 # -- Project information
 
 project = 'tspop'
-copyright = '2022, Tsambos'
-author = 'Tsambos'
+copyright = '2022, Georgia Tsambos'
+author = 'Georgia Tsambos'
 
 release = '0.1'
 version = '0.0.1'
