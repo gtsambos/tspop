@@ -20,7 +20,7 @@ First steps
 -----------
 
   * Head to the :ref:`installation` page to install ``tspop`` on your computer.
-  * Population-based ancestry is **not well-defined** unless you have a notion of times and epochs in your simulated demographic scenarios. Read :ref:`simulationsetup` to see how to design your simulations to ensure they will work with ``tspop``.
+  * Population-based ancestry is **not well-defined** without some notion of a *census time*. Read :ref:`simulationsetup` to see how to design your simulations to ensure they will work with ``tspop``.
   * Flick through the :ref:`examples` to see ``tspop`` in action.
   * Check out :ref:`ideas` to learn more about why ``tspop`` is so efficient.
 
@@ -77,8 +77,7 @@ Simulation setup
 
 .. _ideas:
 
-The ideas behind ``tspop``
-==========================
+:doc:`ideas`
 
 .. _examples:
 
