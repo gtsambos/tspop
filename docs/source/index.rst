@@ -6,7 +6,7 @@ This is the documentation for ``tspop``,
 a lightweight package that helps you extract information about population-based ancestry
 from tree sequences simulated with ``msprime`` and ``SLiM``.
 
-.. todo::
+.. note::
 	Add link to preprint/note when it's written.
 
 We designed ``tspop`` to make it easier for you to extract information
@@ -33,24 +33,24 @@ Installation
 installation with ``pip``. Until then, you can use it locally by
 cloning the ``git`` repository,
 
-```bash
+.. code-block:: bash
 
-$ git clone https://github.com/gtsambos/tspop
-```
+    git clone https://github.com/gtsambos/tspop
+
 
 navigating into the root directory,
 
-```bash
+.. code-block:: bash
 
-$ cd tspop
-```
+    cd tspop
+
 
 and installing it like this:
 
-```bash
+.. code-block:: bash
 
-$ pip install -e
-```
+    pip install -e
+
 
 Developer installation
 ----------------------
@@ -59,11 +59,9 @@ To install ``tspop`` in addition to the packages needed to develop and run tests
 perform the first two steps above in your virtual environment,
 then run the following command:
 
-```bash
+.. code-block:: bash
 
-$ pip install -e .[dev]	
-
-```
+    pip install -e .[dev]	
 
 
 Basic usage
