@@ -11,19 +11,33 @@
 About ``tspop``
 ===============
 
+Suppose your genealogical ancestors can be partitioned into distinct populations (represented here by different colours):
+
+.. image:: static/admixture.png
+   :scale: 50 %
+   :alt: alternate text
+   :align: center
+
+This is typically reported as global and local ancestry:
+
+.. image:: static/local-global-ancestry.png
+   :scale: 50 %
+   :alt: alternate text
+   :align: center
+
+Using ``msprime`` and ``SLiM``,
+you can simulate under detailed models of migration and population structure.
 This is the documentation for ``tspop``,
-a lightweight package that helps you extract information about population-based ancestry
-from tree sequences simulated with ``msprime`` and ``SLiM``.
+a lightweight package that makes it easier for you to extract 
+information about population-based ancestry from these simulations.
 
 .. note::
 	Add link to preprint/note when it's written.
 
-We designed ``tspop`` to make it easier for you to extract information
-about population-based ancestry in simulated genetic datasets.
 Under the hood, ``tspop`` relies on
 
-  * the ``tskit`` package to efficiently extract the population-based information in the simulated datasets
-  * the ``pandas`` package to provide user-friendly, interpretable output
+  * the ``tskit`` package to efficiently extract the population-based information in the simulated datasets.
+  * the ``pandas`` package to provide user-friendly, interpretable output.
 
 First steps
 -----------
