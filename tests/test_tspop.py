@@ -36,15 +36,18 @@ ts_ex = msprime.sim_ancestry(
 )
 
 def test_ancestry_table():
-    t = tspop.AncestryTable(
+    t = tspop.PopAncestry(
         left=[], right=[], population=[], ancestor=[], child=[])
-    print(t.ancestry_table)
 
 def test_ancestry_table_bad_input():
     with pytest.raises(Exception):
-        tspop.AncestryTable(
+        tspop.PopAncestry(
             left=[0], right=[], population=[], ancestor=[], child=[])
 
 def test_pop_ancestry():
 	pop_table = tspop.pop_ancestry(ts_ex, census_time)
 	print(pop_table)
+
+def test_squash_ancestry():
+    pop_table = tspop.pop_ancestry(ts_ex, census_time)
+    print(pop_table.squash_ancestry_tracts())

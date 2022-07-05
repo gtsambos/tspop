@@ -3,7 +3,7 @@ import tskit
 import pandas as pd
 import numpy as np
 
-class AncestryTable(object):
+class PopAncestry(object):
 	"""
 	A table showing all genomic segments of the specified sample IDs
 	that have ancestry with one of the specified populations.
@@ -25,7 +25,7 @@ class AncestryTable(object):
 		self.ancestor = np.array(ancestor, dtype=np.int32)
 		self.child = np.array(child, dtype=np.int32)
 		self.num_rows = self.num_rows()
-		# Create the AncestryTable
+		# Create the ancestry tables
 		self.ancestry_table = pd.DataFrame(
 		data = {
 			'left': left,
@@ -34,6 +34,13 @@ class AncestryTable(object):
 			'population' : population,
 			'child' : child
 		})
+		self.ancestry_table.sort_values(
+			by=['child','left'], inplace=True, ignore_index=True)
+		# Squashed table
+		self.squashed_table = self.squash_ancestry_tracts()
+		self.squashed_table = self.squashed_table[['child', 'population', 'left', 'right']]
+		# Raw table
+		self.ancestry_table = self.ancestry_table[['child', 'population', 'ancestor', 'left', 'right']]
 
 	def __str__(self):
 		ret = "id\tleft\t\tright\t\tancestor\t\tpopulation\tchild\n"
@@ -57,11 +64,44 @@ class AncestryTable(object):
 		assert len(self.right) == len(self.population)
 		assert len(self.population) == len(self.child)
 
+	def squash_ancestry_tracts(self):
+		"""
+		Returns a table showing local ancestry only
+		(population labels are removed and only contiguous segments
+		from the same population are shown.)
+		"""
+		new_sample = []
+		new_left = []
+		new_right = []
+		new_population = []
+
+		for ind, row in self.ancestry_table.iterrows():
+			if ind > 0 and row['left']==new_right[-1] and row['population'] == new_population[-1] and row['child'] == new_sample[-1]:
+				new_right[-1] = row['right']
+			else:
+				new_sample.append(row['child'])
+				new_left.append(row['left'])
+				new_right.append(row['right'])
+				new_population.append(row['population'])
+				
+		squashed_ancestry_table = pd.DataFrame({
+			'child': [int(i) for i in new_sample],
+			'left' : new_left,
+			'right': new_right,
+			'population' : [int(p) for p in new_population]
+		})
+
+		return(squashed_ancestry_table)
+
 def pop_ancestry(ts, census_time):
+	"""
+	Creates a PopAncestry object.
+	:param tskit.TreeSequence ts: A tree sequence containing census nodes.
+	:param census_time: The time at which the census nodes are recorded.
+	:type census_time: list(int)
+	"""
 	census_nodes = _get_census_nodes(ts, census_time)
 	pop_table = _replace_parents_with_pops(ts, census_nodes)
-	# pop_table = _squash_ancestry_tracts(pop_table)
-	# pop_table = pop_table[['child', 'population', 'left', 'right']]
 	return pop_table
 
 def _get_census_nodes(ts, census_time):
@@ -74,7 +114,7 @@ def _replace_parents_with_pops(ts, census_nodes):
 		ancestors=census_nodes
 		)
 	population_ids = ts.tables.nodes.population
-	local_ancestry = AncestryTable(left=ancestor_table.left,
+	local_ancestry = PopAncestry(left=ancestor_table.left,
 		right=ancestor_table.right,
 		ancestor=ancestor_table.parent,
 		population=[population_ids[n] for n in ancestor_table.parent],
@@ -82,33 +122,4 @@ def _replace_parents_with_pops(ts, census_nodes):
 	)
 
 	return local_ancestry
-
-# def _squash_ancestry_tracts(local_ancestry):
-#     # TODO: make this an AncestryTable
-# 	new_sample = []
-# 	new_left = []
-# 	new_right = []
-# 	new_population = []
-
-# 	local_ancestry.sort_values(
-# 	    by=['child','left'], inplace=True, ignore_index=True)
-
-# 	for ind, row in local_ancestry.iterrows():
-# 	    if ind > 0 and row['left']==new_right[-1] and row['population'] == new_population[-1] and row['child'] == new_sample[-1]:
-# 	        new_right[-1] = row['right']
-# 	    else:
-# 	        new_sample.append(row['child'])
-# 	        new_left.append(row['left'])
-# 	        new_right.append(row['right'])
-# 	        new_population.append(row['population'])
-			
-# 	squashed_ancestry_table = pd.DataFrame({
-# 	    'child': [int(i) for i in new_sample],
-# 	    'left' : new_left,
-# 	    'right': new_right,
-# 	    'population' : [int(p) for p in new_population]
-# 	})
-
-# 	return(squashed_ancestry_table)
-
 
