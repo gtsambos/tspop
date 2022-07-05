@@ -1,9 +1,10 @@
 
 import tspop
 import msprime
+import pytest
 
 # a test tree sequence.
-census_time = 599.5
+census_time = 20.5
 demography = msprime.Demography()
 demography.add_population(
     name="SMALL", initial_size=200)
@@ -27,26 +28,22 @@ demography.add_population_split(
 )
 seq_length = 1e7
 ts_ex = msprime.sim_ancestry(
-    samples={"SMALL": 0, "BIG": 0, "ADMIX" : 5},
+    samples={"SMALL": 0, "BIG": 0, "ADMIX" : 2},
     demography=demography,
     random_seed=1008,
     sequence_length=seq_length,
     recombination_rate=3e-8
 )
 
-# Test functions.
-# def test_get_census_nodes():
-# 	nodes = tspop.get_census_nodes(ts_ex, census_time)
-# 	node_table = ts_ex.tables.nodes
-# 	for n in nodes:
-# 		assert node_table.time[n] == census_time
+def test_ancestry_table():
+    t = tspop.AncestryTable(
+        left=[], right=[], population=[], ancestor=[], child=[])
+    print(t.ancestry_table)
 
-# def test_replace_parents_with_pops():
-# 	census_nodes = tspop.get_census_nodes(ts_ex, census_time)
-# 	pop_table = tspop.replace_parents_with_pops(ts_ex, census_nodes)
-# 	pops = pop_table['population']
-# 	for p in pops:
-# 		assert p in [0, 1]
+def test_ancestry_table_bad_input():
+    with pytest.raises(Exception):
+        tspop.AncestryTable(
+            left=[0], right=[], population=[], ancestor=[], child=[])
 
 def test_pop_ancestry():
 	pop_table = tspop.pop_ancestry(ts_ex, census_time)

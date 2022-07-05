@@ -25,7 +25,8 @@ setup(
 	long_description_content_type = "text/x-rst",
 	install_requires = [
 		"tskit>=0.2.3",
-		"pandas>=1.0.0"
+		"pandas>=1.0.0",
+		"numpy>=1.0.0"
 	],
 	extras_require = {
 		"dev" : ["pytest>=3.7",
