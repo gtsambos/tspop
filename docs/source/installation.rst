@@ -34,4 +34,18 @@ then run the following command:
 
 .. code-block:: bash
 
-    pip install -e .[dev]	
+    pip install -e .[dev]
+
+Compiling the documentation
+---------------------------
+
+.. note::
+	Finish later.
+
+.. code-block:: bash
+
+	cd docs/source
+	sphinx-build -b html . _build
+	cd ..
+	make clean
+	make html

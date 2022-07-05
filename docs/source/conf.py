@@ -1,4 +1,8 @@
 # Configuration file for the Sphinx documentation builder.
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information
 
@@ -17,6 +21,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.todo'
 ]
 
 intersphinx_mapping = {
@@ -27,9 +32,16 @@ intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
 
+# Master ("home") document
+master_doc = 'index'
+
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+# Directory to look for API
+autoapi_dirs = ['../../src']
+# autodoc_default_options = {"private-members": False}

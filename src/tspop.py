@@ -25,7 +25,7 @@ class PopAncestry(object):
 		self.population = np.array(population, dtype=np.int32)
 		self.ancestor = np.array(ancestor, dtype=np.int32)
 		self.sample = np.array(child, dtype=np.int32)
-		self.num_rows = self.num_rows()
+		self.num_rows = self.__num_rows()
 		
 		# Create the ancestry tables
 		self.ancestry_table = pd.DataFrame(
@@ -62,7 +62,7 @@ class PopAncestry(object):
 		ret += "Ancestral coverage: \t\t\t{:.6f}\n".format(self.coverage)
 		return ret[:-1]
 
-	def num_rows(self):
+	def __num_rows(self):
 		"""
 		Returns the number of rows in the table.
 		"""
@@ -117,15 +117,15 @@ def pop_ancestry(ts, census_time):
 	:param census_time: The time at which the census nodes are recorded.
 	:type census_time: list(int)
 	"""
-	census_nodes = _get_census_nodes(ts, census_time)
-	pop_table = _replace_parents_with_pops(ts, census_nodes)
+	census_nodes = __get_census_nodes(ts, census_time)
+	pop_table = __replace_parents_with_pops(ts, census_nodes)
 	return pop_table
 
-def _get_census_nodes(ts, census_time):
+def __get_census_nodes(ts, census_time):
 	census_nodes = [u.id for u in ts.nodes() if u.time == census_time]
 	return census_nodes
 
-def _replace_parents_with_pops(ts, census_nodes):
+def __replace_parents_with_pops(ts, census_nodes):
 	ancestor_table = ts.tables.link_ancestors(
 		samples=ts.samples(), 
 		ancestors=census_nodes
