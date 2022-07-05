@@ -7,6 +7,7 @@
    basicusage
    ideas
    examples
+   tspop
 
 About ``tspop``
 ===============

@@ -16,7 +16,7 @@ By default, ``msprime`` and ``SLiM`` do not retain information about the ancestr
 The rest of this page explains how to explicitly specify this.
 
 ``msprime`` simulations
----------------------
+-----------------------
 
 Let's make this more concrete with an example.
 Here's a ``msprime.Demography`` object describing an admixture event between two populations,
