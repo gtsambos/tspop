@@ -7,7 +7,7 @@
    basicusage
    ideas
    examples
-   tspop
+   modules
 
 
 About ``tspop``

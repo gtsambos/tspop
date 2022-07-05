@@ -26,7 +26,7 @@ setup(
 	install_requires = [
 		"tskit>=0.2.3",
 		"pandas>=1.0.0",
-		"numpy>=1.0.0"
+		"numpy>=1.10.0"
 	],
 	extras_require = {
 		"dev" : ["pytest>=3.7",

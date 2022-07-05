@@ -1,6 +1,7 @@
 # Configuration file for the Sphinx documentation builder.
 import sys
 import os
+import mock
 
 sys.path.insert(0, os.path.abspath('../../src'))
 
@@ -43,5 +44,6 @@ html_theme = 'sphinx_rtd_theme'
 epub_show_urls = 'footnote'
 
 # Directory to look for API
-autoapi_dirs = ['../../src']
+# autoapi_dirs = ['../../src']
+# autodoc_mock_imports = ["msprime", "pandas", "numpy", "numpy.core.multiarray"]
 # autodoc_default_options = {"private-members": False}
