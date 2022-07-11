@@ -3,6 +3,9 @@
 
 # Docs
 docs/source/_build/
+docs/.DS_Store
+docs/code-notebooks/*
+# Last one is for now. Should figure out how to include
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
