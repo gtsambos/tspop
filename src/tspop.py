@@ -45,7 +45,7 @@ class PopAncestry(object):
 		self.ancestry_table.sort_values(
 			by=['sample','left'], inplace=True, ignore_index=True)
 		# Squashed table
-		self.squashed_table = self.squash_ancestry_tracts()
+		self.squashed_table = self._squash_ancestry_tracts()
 		# Reorder the raw table
 		self.ancestry_table = self.ancestry_table[['sample', 'left', 'right', 'ancestor', 'population']]
 
@@ -57,7 +57,7 @@ class PopAncestry(object):
 		self.ancestors = list(set(self.ancestry_table['ancestor']))
 		self.num_ancestors = len(self.ancestors)
 		self.total_genome_length = sequence_length * self.num_samples
-		self.coverage = self.calculate_coverage()
+		self.coverage = self._calculate_coverage()
 
 	def __str__(self):
 		ret = """\n\nPopAncestry summary\n\n"""
@@ -72,10 +72,10 @@ class PopAncestry(object):
 		"""
 		Returns the number of rows in the table.
 		"""
-		self.check_row_lengths()
+		self._check_row_lengths()
 		return len(self.left)
 
-	def check_row_lengths(self):
+	def _check_row_lengths(self):
 		"""
 		Checks that the length of each input field is the same.
 		"""
@@ -83,7 +83,7 @@ class PopAncestry(object):
 		assert len(self.right) == len(self.population)
 		assert len(self.population) == len(self.sample)
 
-	def squash_ancestry_tracts(self):
+	def _squash_ancestry_tracts(self):
 		"""
 		Returns a table showing local ancestry only
 		(population labels are removed and only contiguous segments
@@ -112,11 +112,11 @@ class PopAncestry(object):
 
 		return(squashed_ancestry_table)
 
-	def calculate_coverage(self):
+	def _calculate_coverage(self):
 		lengths = self.squashed_table['right'] - self.squashed_table['left']
 		return np.sum(lengths)
 
-def pop_ancestry(ts, census_time):
+def get_pop_ancestry(ts, census_time):
 	"""
 	Creates a PopAncestry object.
 

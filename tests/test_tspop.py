@@ -46,9 +46,22 @@ def test_ancestry_table_bad_input():
 			left=[0], right=[], population=[], ancestor=[], child=[])
 
 def test_pop_ancestry():
-	p = tspop.pop_ancestry(ts_ex, census_time)
+	p = tspop.get_pop_ancestry(ts_ex, census_time)
+	print("PopAncestry summary info:")
 	print(p)
 
-def test_squash_ancestry():
-	pop_table = tspop.pop_ancestry(ts_ex, census_time)
+def test_table_output():
+	pop_table = tspop.get_pop_ancestry(ts_ex, census_time)
+	print("Table output:")
 	print(pop_table.squashed_table)
+	print(pop_table.ancestry_table)
+
+def test_calculate_global_ancestry():
+	pop_table = tspop.get_pop_ancestry(ts_ex, census_time)
+	st = pop_table.squashed_table
+	st0 = st[st.population == 0]
+	print(st0)
+	pop0_lengths = sum(st0.right - st0.left)
+	print(pop0_lengths/pop_table.total_genome_length)
+
+
