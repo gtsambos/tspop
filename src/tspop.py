@@ -10,12 +10,18 @@ class PopAncestry(object):
 	Each row (L, R, P, S) indicates that over the genomic interval
 	with coordinates (L, R), the sample node with ID S has inherited
 	from an ancestral node in population P.
+
 	:ivar left: The array of left coordinates.
 	:vartype left: numpy.ndarray, dtype=np.float64
 	:ivar right: The array of right coordinates.
 	:vartype right: numpy.ndarray, dtype=np.float64
 	:ivar population: The array of population labels.
 	:vartype population: numpy.ndarray, dtype=np.int32
+	:ivar sample_nodes: The list of IDs corresponding to sample nodes.
+	:vartype sample_nodes: list(int)
+	:ivar sequence_length: The physical length of the region represented.
+	:vartype sequence_length: float
+
 	"""
 
 	def __init__(self, left, right, population, ancestor, child,
@@ -113,10 +119,12 @@ class PopAncestry(object):
 def pop_ancestry(ts, census_time):
 	"""
 	Creates a PopAncestry object.
+
 	:param tskit.TreeSequence ts: A tree sequence containing census nodes.
 	:param census_time: The time at which the census nodes are recorded.
 	:type census_time: list(int)
 	"""
+
 	census_nodes = __get_census_nodes(ts, census_time)
 	pop_table = __replace_parents_with_pops(ts, census_nodes)
 	return pop_table
@@ -130,6 +138,7 @@ def __replace_parents_with_pops(ts, census_nodes):
 		samples=ts.samples(), 
 		ancestors=census_nodes
 		)
+		
 	population_ids = ts.tables.nodes.population
 	local_ancestry = PopAncestry(left=ancestor_table.left,
 		right=ancestor_table.right,

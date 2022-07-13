@@ -37,7 +37,8 @@ ts_ex = msprime.sim_ancestry(
 
 def test_ancestry_table():
 	t = tspop.PopAncestry(
-		left=[], right=[], population=[], ancestor=[], child=[])
+		left=[], right=[], population=[], ancestor=[], child=[],
+		sample_nodes=[], sequence_length=1)
 
 def test_ancestry_table_bad_input():
 	with pytest.raises(Exception):
