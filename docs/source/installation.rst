@@ -23,7 +23,7 @@ and installing it like this:
 
 .. code-block:: bash
 
-    pip install -e
+    pip install .
 
 Developer installation
 ----------------------
@@ -34,7 +34,7 @@ then run the following command:
 
 .. code-block:: bash
 
-    pip install -e .[dev]
+    pip install .[dev]
 
 Compiling the documentation
 ---------------------------
@@ -45,7 +45,5 @@ Compiling the documentation
 .. code-block:: bash
 
 	cd docs/source
-	sphinx-build -b html . _build
-	cd ..
 	make clean
 	make html
