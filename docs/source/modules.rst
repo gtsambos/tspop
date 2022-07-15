@@ -1,7 +1,5 @@
-src
+API
 ===
 
-.. toctree::
-   :maxdepth: 4
+.. automodule:: tspop
 
-   tspop

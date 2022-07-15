@@ -1,5 +1,5 @@
-tspop module
-============
+API
+===
 
 .. automodule:: tspop
    :members:

@@ -44,6 +44,6 @@ html_theme = 'sphinx_rtd_theme'
 epub_show_urls = 'footnote'
 
 # Directory to look for API
-# autoapi_dirs = ['../../src']
-# autodoc_mock_imports = ["msprime", "pandas", "numpy", "numpy.core.multiarray"]
+autoapi_dirs = ['../../src']
+autodoc_mock_imports = ["msprime", "tskit", "pandas", "numpy>=1.10.0"]
 # autodoc_default_options = {"private-members": False}
