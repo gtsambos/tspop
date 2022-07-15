@@ -5,22 +5,23 @@ import numpy as np
 
 class PopAncestry(object):
 	"""
+	In most cases, this should be created with the :meth:`tspop.get_pop_ancestry` method.
 	A table showing all genomic segments of the specified sample IDs
 	that have ancestry with one of the specified populations.
 	Each row (L, R, P, S) indicates that over the genomic interval
 	with coordinates (L, R), the sample node with ID S has inherited
 	from an ancestral node in population P.
 
-	:ivar left: The array of left coordinates.
-	:vartype left: numpy.ndarray, dtype=np.float64
-	:ivar right: The array of right coordinates.
-	:vartype right: numpy.ndarray, dtype=np.float64
-	:ivar population: The array of population labels.
-	:vartype population: numpy.ndarray, dtype=np.int32
-	:ivar sample_nodes: The list of IDs corresponding to sample nodes.
-	:vartype sample_nodes: list(int)
-	:ivar sequence_length: The physical length of the region represented.
-	:vartype sequence_length: float
+	:arg left: The array of left coordinates.
+	:type left: list(float)
+	:arg right: The array of right coordinates.
+	:type right: list(float)
+	:arg population: The array of population labels.
+	:type population: list(int)
+	:arg sample_nodes: The list of IDs corresponding to sample nodes.
+	:type sample_nodes: list(int)
+	:arg sequence_length: The physical length of the region represented.
+	:type sequence_length: float
 
 	"""
 
@@ -31,7 +32,7 @@ class PopAncestry(object):
 		self.population = np.array(population, dtype=np.int32)
 		self.ancestor = np.array(ancestor, dtype=np.int32)
 		self.sample = np.array(child, dtype=np.int32)
-		self.num_rows = self.__num_rows()
+		# self._num_rows = self.__num_rows()
 		
 		# Create the ancestry tables
 		self.ancestry_table = pd.DataFrame(
@@ -46,21 +47,27 @@ class PopAncestry(object):
 			by=['sample','left'], inplace=True, ignore_index=True)
 		# Squashed table
 		self.squashed_table = self._squash_ancestry_tracts()
+		"""Docstring."""
 		# Reorder the raw table
 		self.ancestry_table = self.ancestry_table[['sample', 'left', 'right', 'ancestor', 'population']]
+		"""Docstring."""
 
 		# Summary attributes. Some are just wrappers for the ts attributes -- needed?
 		self.ancestral_pops = list(set(self.squashed_table['population']))
 		self.num_ancestral_pops = len(self.ancestral_pops)
 		self.samples = sample_nodes
 		self.num_samples = len(sample_nodes)
+		"""Docstring."""
 		self.ancestors = list(set(self.ancestry_table['ancestor']))
 		self.num_ancestors = len(self.ancestors)
+		"""Docstring."""
 		self.total_genome_length = sequence_length * self.num_samples
+		"""Docstring."""
 		self.coverage = self._calculate_coverage()
+		"""Docstring."""
 
 	def __str__(self):
-		ret = """\n\nPopAncestry summary\n\n"""
+		ret = """\nPopAncestry summary\n"""
 		ret += "Number of ancestral populations: \t{}\n".format(self.num_ancestral_pops)
 		ret += "Number of sample chromosomes: \t\t{}\n".format(self.num_samples)
 		ret += "Number of ancestors: \t\t\t{}\n".format(self.num_ancestors)
@@ -68,12 +75,12 @@ class PopAncestry(object):
 		ret += "Ancestral coverage: \t\t\t{:.6f}\n".format(self.coverage)
 		return ret[:-1]
 
-	def __num_rows(self):
-		"""
-		Returns the number of rows in the table.
-		"""
-		self._check_row_lengths()
-		return len(self.left)
+	# def __num_rows(self):
+	# 	"""
+	# 	Returns the number of rows in the table.
+	# 	"""
+	# 	self._check_row_lengths()
+	# 	return len(self.left)
 
 	def _check_row_lengths(self):
 		"""
@@ -118,11 +125,14 @@ class PopAncestry(object):
 
 def get_pop_ancestry(ts, census_time):
 	"""
-	Creates a PopAncestry object.
+	Creates a :class:`tspop.PopAncestry` object from a simulated tree sequence containing
+	ancestral census nodes. These are the ancestors that population-based
+	ancestry will be calculated with respect to.
 
 	:param tskit.TreeSequence ts: A tree sequence containing census nodes.
 	:param census_time: The time at which the census nodes are recorded.
 	:type census_time: list(int)
+	:returns: a :class:`tspop.PopAncestry` object
 	"""
 
 	census_nodes = __get_census_nodes(ts, census_time)
