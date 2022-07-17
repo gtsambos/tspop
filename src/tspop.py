@@ -6,11 +6,7 @@ import numpy as np
 class PopAncestry(object):
 	"""
 	In most cases, this should be created with the :meth:`tspop.get_pop_ancestry` method.
-	A table showing all genomic segments of the specified sample IDs
-	that have ancestry with one of the specified populations.
-	Each row (L, R, P, S) indicates that over the genomic interval
-	with coordinates (L, R), the sample node with ID S has inherited
-	from an ancestral node in population P.
+	An object holding local ancestry information, and various summaries of that information.
 
 	:arg left: The array of left coordinates.
 	:type left: list(float)
@@ -47,24 +43,38 @@ class PopAncestry(object):
 			by=['sample','left'], inplace=True, ignore_index=True)
 		# Squashed table
 		self.squashed_table = self._squash_ancestry_tracts()
-		"""Docstring."""
+		"""
+		A pandas.DataFrame object with column labels ``sample``, ``left``, ``right``, ``population``.
+		Each row (``sample``, ``left``, ``right``, ``population``) indicates that over the genomic interval
+		with coordinates [``left``, ``right``), the sample node with ID ``sample`` has inherited
+		from an ancestral node in the population with ID ``population``.
+		Population labels are taken from the specified census time.
+		"""
 		# Reorder the raw table
 		self.ancestry_table = self.ancestry_table[['sample', 'left', 'right', 'ancestor', 'population']]
-		"""Docstring."""
+		"""
+		A pandas.DataFrame object with column labels ``sample``, ``left``, ``right``, ``ancestor``, ``population``.
+		Each row (``sample``, ``left``, ``right``, ``ancestor``, ``population``) indicates that over the genomic interval
+		with coordinates [``left``, ``right``), the sample node with ID ``sample`` has inherited
+		from the ancestral node with ID ``ancestor`` in the population with ID ``population``.
+		Ancestral nodes and population labels are taken from the specified census time.
+		"""
 
 		# Summary attributes. Some are just wrappers for the ts attributes -- needed?
 		self.ancestral_pops = list(set(self.squashed_table['population']))
 		self.num_ancestral_pops = len(self.ancestral_pops)
 		self.samples = sample_nodes
 		self.num_samples = len(sample_nodes)
-		"""Docstring."""
+		"""The number of provided samples."""
 		self.ancestors = list(set(self.ancestry_table['ancestor']))
 		self.num_ancestors = len(self.ancestors)
-		"""Docstring."""
+		"""The number of ancestral haplotypes. Strictly less than or equal to the
+		number of inputted ancestral nodes."""
 		self.total_genome_length = sequence_length * self.num_samples
-		"""Docstring."""
+		"""Sequence length times the number of samples."""
 		self.coverage = self._calculate_coverage()
-		"""Docstring."""
+		"""The proportion of the total genome length with an ancestor in the
+		:attr:`tspop.PopAncestry.squashed_table` and :attr:`tspop.PopAncestry.ancestry_table`."""
 
 	def __str__(self):
 		ret = """\nPopAncestry summary\n"""

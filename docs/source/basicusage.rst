@@ -42,7 +42,7 @@ Note the census time at 100.01:
        recombination_rate=rho
    )
 
-Apply ``tspop.get_pop_ancestry()`` to get a PopulationAncestry object.
+Apply :meth:`tspop.get_pop_ancestry` to get a :class:`tspop.PopAncestry` object.
 
 .. code-block:: python
 
@@ -66,7 +66,7 @@ Use ``print`` to see a summary of the information held within the object.
    > Ancestral coverage:        40000000.000000
 
 The ancestral information itself is inside two tables.
-The ``squashed_table`` shows tracts of ancestry:
+The :attr:`tspop.PopAncestry.squashed_table` shows tracts of ancestry:
 
 .. code-block:: python
 
@@ -86,7 +86,7 @@ The ``squashed_table`` shows tracts of ancestry:
    > 58       3  8918727.0  10000000.0           0
 
 
-The ``ancestry_table`` shows a superset of this information: tracts
+The :attr:`tspop.PopAncestry.ancestry_table` shows a superset of this information: tracts
 of ancestry, and the ancestor at the census time who contributed
 each tract.
 Each row of the squashed table above can be obtained by 'gluing together' rows of the ancestry table.
@@ -109,7 +109,7 @@ Each row of the squashed table above can be obtained by 'gluing together' rows o
    > 136       3  9165035.0   9176562.0        47           0
    > 137       3  9176562.0  10000000.0        58           0
 
-Both the ``squashed_table`` and the ``ancestry_table`` are pandas dataframes,
+Both the :attr:`tspop.PopAncestry.squashed_table` and the :attr:`tspop.PopAncestry.ancestry_table` are pandas dataframes,
 so can be analysed using standard operations.
 
 Example: calculating global ancestry
@@ -117,7 +117,7 @@ Example: calculating global ancestry
 
 For instance, we could get the sum of all regions inherited from an
 ancestor in population 0 like this.
-We'll first subset the ``squashed_table`` to only those tracts inherited from an ancestor in population 0:
+We'll first subset the :attr:`tspop.PopAncestry.squashed_table` to only those tracts inherited from an ancestor in population 0:
 
 .. code-block::  python
 
@@ -145,7 +145,7 @@ we get the length of the tracts from population 0:
 
    > 23278398.0
 
-Dividing this by the sum of the genomic lengths in the PopAncestry object gives the proportion of the genomes that were inherited from
+Dividing this by the sum of the genomic lengths in the :class:`tspop.PopAncestry` object gives the proportion of the genomes that were inherited from
 individuals in population 0, with reference to the ancestors present at the census time:
 
 .. code-block:: python
