@@ -31,7 +31,8 @@ setup(
 	install_requires = [
 		"tskit>=0.2.3",
 		"pandas>=1.2.0",
-		"numpy>=1.21.0"
+		"numpy>=1.21.0",
+		"matplotlib>=3.4.0"
 	],
 	extras_require = {
 		"dev" : ["pytest>=3.7",

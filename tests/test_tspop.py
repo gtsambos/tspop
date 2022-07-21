@@ -73,13 +73,13 @@ class TestBasicUsage():
 		print(pop0_lengths/pop_table.total_genome_length)
 
 
-# class TestPlots:
-# 	"""Tests karyotype plotting."""
+class TestPlots:
+	"""Tests karyotype plotting."""
 
-# 	(ts_ex, census_time) = sim_ts()
+	(ts_ex, census_time) = sim_ts()
 
-# 	def test_karotype(self):
-# 		pop_table = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
-# 		pop_table.plot_karyotypes()
+	def test_karyotype(self):
+		pop_table = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
+		pop_table.plot_karyotypes()
 
 
