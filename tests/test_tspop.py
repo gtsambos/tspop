@@ -5,7 +5,7 @@ import pytest
 
 # a test tree sequence.
 def sim_ts():
-	census_time = 20.5
+	census_time = 200.5
 	demography = msprime.Demography()
 	demography.add_population(
 		name="SMALL", initial_size=200)
@@ -16,7 +16,7 @@ def sim_ts():
 	demography.add_population(
 		name="ANC", initial_size=500)
 	demography.add_admixture(
-		time=20,
+		time=200,
 		derived="ADMIX",
 		ancestral=["SMALL", "BIG"],
 		proportions=[0.5, 0.5]
@@ -80,6 +80,12 @@ class TestPlots:
 
 	def test_karyotype(self):
 		pop_table = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
-		pop_table.plot_karyotypes()
+		pop_table.plot_karyotypes(
+			sample_pair= [0,3],
+			title="Hominin ancestry in an Homo Sapiens individual",
+			length_in_Mb=True,
+			pop_labels=['HomSap', 'HomNea', 'ArcAfr'],
+			height=4,
+			width=13, outfile="myfile.png")
 
 

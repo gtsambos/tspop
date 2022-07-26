@@ -137,12 +137,41 @@ class PopAncestry(object):
 		lengths = self.squashed_table['right'] - self.squashed_table['left']
 		return np.sum(lengths)
 
-	def plot_karyotypes(self, chrom_labels=None,
-		colors=None, pop_labels=None, title=None):
+	def plot_karyotypes(self, sample_pair,
+		colors=None, pop_labels=None, title=None, length_in_Mb=True,
+		outfile=None, height=4, width=13):
 		"""
-		Creates a plot of the ancestry tracts in a pair of chromosomes
+		.. note::
+			Diploid only for now.
+
+		Creates a plot of the ancestry tracts in a sample pair of chromosomes
+		using ``matplotlib``.
+
+		:param sample_pair: a pair of sample node IDs in the PopAncestry object.
+		:type sample_pair: list(int)
+		:param colors: A list of pyplot-compatible colours to use for the ancestral
+			populations, given in order of their appearance in the :attr:`tspop.PopAncestry.squashed_table`.
+			If None, uses the default matplotlib colour cycle.
+		:type colors: list(str)
+		:param pop_labels: Ancestral population labels for the plot legend. If None,
+			defaults to Pop0, Pop1 etc.
+		:type pop_labels: list(str)
+		:param title: The title of the plot. If None, defaults to
+			'Ancestry in admixed individual'.
+		:type title: str
+		:param length_in_Mb: Whether or not to label the horizontal axis
+			in megabases. Defaults to True.
+		:type length_in_Mb: bool
+		:param outfile: The name of the output file.
+			If None, the plot opens with the system viewer.
+		:type outfile: str
+		:param height: The height of the figure in inches.
+		:type height: float
+		:param width: The width of the figure in inches.
+		:type width: float
+		:returns: a matplotlib figure.
 		"""
-		# Set keyword arguments
+		# Set keyword arguments and default values
 		if colors is None:
 			prop_cycle = plt.rcParams['axes.prop_cycle']
 			colors = prop_cycle.by_key()['color']
@@ -150,15 +179,16 @@ class PopAncestry(object):
 
 		if pop_labels is None:
 			pop_labels = [f'Pop{i}' for i in range(self.num_ancestral_pops)]
-		assert len(pop_labels) == self.num_ancestral_pops
+		# assert len(pop_labels) == self.num_ancestral_pops
 
 		if title is None:
 			title = 'Ancestry in admixed individual'
 
-		chrom_labels = {0: 'chr1', 1: 'chr2'}
+		chrom_labels = {sample_pair[0]: 'chr1', sample_pair[1]: 'chr2'}
 		length = self._sequence_length
 
-		fig, (chr0, chr1) = plt.subplots(2, figsize=(10,2))
+		# Initialise plot
+		fig, (chr0, chr1) = plt.subplots(2, figsize=(width, height))
 		fig.suptitle(title)
 		fig.frameon=False
 		fig.legend(
@@ -167,9 +197,10 @@ class PopAncestry(object):
 			loc = 'right'
 		)
 
-		for ind, row in self.squashed_table.iterrows():
-			if row['sample'] > 1:
-				break
+		# Subset data down to just the two specified samples
+		st = self.squashed_table[self.squashed_table['sample'].isin(sample_pair)]
+
+		for ind, row in st.iterrows():
 			chunk = np.array([[row['left']/length, 0], [row['right']/length, 0],
 							  [row['right']/length, 1], [row['left']/length, 1]])
 			if chrom_labels[row['sample']] == 'chr1':
@@ -177,14 +208,22 @@ class PopAncestry(object):
 			elif chrom_labels[row['sample']] == 'chr2':
 				chr1.add_patch(Polygon(xy=chunk, color = colors[int(row['population'])]))
 
-		chr0.set_ylabel('Chrom 1')
+		chr0.set_ylabel('Sample 1')
 		chr0.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-		# chr1.set_xticks(ticks= [0.25, 0.5, 0.75, 1.0])
-		# chr1.set_xticklabels([i*self._sequence_length/4 for i in range(1, 5)])
-		chr1.set_xlabel('Chromosomal position (bases)')
-		chr1.set_ylabel('Chrom 2')
+		chr1.set_xticks(ticks= [0.25, 0.5, 0.75, 1.0])
+		if length_in_Mb:
+			chr1.set_xticklabels([i*self._sequence_length*1e-6/4 for i in range(1, 5)])
+			chr1.set_xlabel('Chromosomal position (Mb)')
+		else:
+			chr1.set_xticklabels([i*self._sequence_length/4 for i in range(1, 5)])
+			chr1.set_xlabel('Chromosomal position (bases)')
+		chr1.set_ylabel('Sample 2')
 		chr1.tick_params(left=False, labelleft=False)
-		plt.show()
+
+		if outfile is None:
+			plt.show()
+		else:
+			plt.savefig(outfile, format='png', facecolor='white')
 
 def get_pop_ancestry(ts, census_time):
 	"""
