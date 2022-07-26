@@ -3,9 +3,15 @@
 Installation
 ============
 
-``tspop`` will soon be available on `PyPi <https://pypi.org/>`_ for
-installation with ``pip``. Until then, you can use it locally by
-cloning the ``git`` repository,
+``tspop`` is available on `PyPi <https://pypi.org/>`_ for
+installation with ``pip``:
+
+.. code-block:: bash
+
+    pip install tspop 
+
+If you absolutely must use the most up-to-date code,
+you can do it by cloning the ``git`` repository,
 
 .. code-block:: bash
 
