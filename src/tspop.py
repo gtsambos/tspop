@@ -222,7 +222,7 @@ class PopAncestry(object):
 		chr1.set_ylabel('Sample 2', fontsize=16)
 		chr1.tick_params(left=False, labelleft=False)
 
-		plt.subplots_adjust(top = 0.8, bottom = 0.2, right = 0.85, left = 0.15, 
+		plt.subplots_adjust(top = 0.8, bottom = 0.2, right = 0.85, left = 0.05, 
             hspace = .2, wspace = .2)
 
 		if outfile is None:
