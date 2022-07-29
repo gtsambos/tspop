@@ -14,6 +14,10 @@ on whether we are interested in ancestry one or two generations ago.
 By default, ``msprime`` and ``SLiM`` do not retain information about the ancestry of individuals at each timepoint in the simulated history.
 The rest of this page explains how to rectify this.
 
+.. note::
+
+	Update this so that the demographic scenario is written in Demes, and then exported to `msprime` and `SLiM`.
+
 ``msprime`` simulations
 -----------------------
 
@@ -141,8 +145,16 @@ For instance, we see here that sample 0 has local ancestry with the blue populat
 while the other samples have ancestry with the red population.
 
 
+``SLiM`` simulations
+--------------------
+
+.. note::
+
+	Export above example to SLiM.
+
+
 When should you add the census?
-*******************************
+-------------------------------
 
 You should specify the census event at a time when 
 
