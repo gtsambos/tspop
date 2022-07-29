@@ -139,7 +139,7 @@ class PopAncestry(object):
 
 	def plot_karyotypes(self, sample_pair,
 		colors=None, pop_labels=None, title=None, length_in_Mb=True,
-		outfile=None, height=4, width=13):
+		outfile=None, height=12, width=20):
 		"""
 		.. note::
 			Diploid only for now.
@@ -189,12 +189,13 @@ class PopAncestry(object):
 
 		# Initialise plot
 		fig, (chr0, chr1) = plt.subplots(2, figsize=(width, height))
-		fig.suptitle(title)
+		fig.suptitle(title, fontsize=18)
 		fig.frameon=False
 		fig.legend(
 			handles = [Polygon(xy = np.array([[0,0],[0,1],[1,1],[1,0]]), color = i) for i in colors],
 			labels = pop_labels,
-			loc = 'right'
+			loc = 'right',
+			fontsize = 14
 		)
 
 		# Subset data down to just the two specified samples
@@ -208,17 +209,21 @@ class PopAncestry(object):
 			elif chrom_labels[row['sample']] == 'chr2':
 				chr1.add_patch(Polygon(xy=chunk, color = colors[int(row['population'])]))
 
-		chr0.set_ylabel('Sample 1')
+		chr0.set_ylabel('Sample 1', fontsize=16)
 		chr0.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
 		chr1.set_xticks(ticks= [0.25, 0.5, 0.75, 1.0])
 		if length_in_Mb:
-			chr1.set_xticklabels([i*self._sequence_length*1e-6/4 for i in range(1, 5)])
-			chr1.set_xlabel('Chromosomal position (Mb)')
+			chr1.set_xticklabels([round(i*self._sequence_length*1e-6/4, 1) for i in range(1, 5)],
+				fontsize=16)
+			chr1.set_xlabel('Chromosomal position (Mb)', fontsize=16)
 		else:
 			chr1.set_xticklabels([i*self._sequence_length/4 for i in range(1, 5)])
-			chr1.set_xlabel('Chromosomal position (bases)')
-		chr1.set_ylabel('Sample 2')
+			chr1.set_xlabel('Chromosomal position (bases)', fontsize=16)
+		chr1.set_ylabel('Sample 2', fontsize=16)
 		chr1.tick_params(left=False, labelleft=False)
+
+		plt.subplots_adjust(top = 0.8, bottom = 0.2, right = 0.85, left = 0.15, 
+            hspace = .2, wspace = .2)
 
 		if outfile is None:
 			plt.show()

@@ -86,6 +86,8 @@ class TestPlots:
 			length_in_Mb=True,
 			pop_labels=['HomSap', 'HomNea', 'ArcAfr'],
 			height=4,
-			width=13, outfile="myfile.png")
+			width=13,
+			# outfile="myfile.png",
+			)
 
 
