@@ -35,12 +35,38 @@ Developer installation
 ----------------------
 
 To install ``tspop`` in addition to the packages needed to develop and run tests,
-perform the first two steps above in your virtual environment,
-then run the following command:
+perform the first two steps above, then run the following command:
 
 .. code-block:: bash
 
-    pip install .[dev]
+    pip install -e .[dev]
+
+I recommend developing `tspop` in a virtual environment like a ![conda environment](https://conda.io/projects/conda/en/latest/index.html).
+
+Running the tests
+-----------------
+
+The test suite uses the ![`pytest`](https://docs.pytest.org/en/7.2.x/) module.
+
+.. code-block:: bash
+
+    pytest tests
+
+You can run specific classes or tests in specific test files:
+
+.. code-block:: bash
+
+    pytest tests/test_tspop.py::TestIbdSquash
+
+To get printed output from the tests, use the `s` flag:
+
+.. code-block:: bash
+
+    pytest -s tests/test_tspop.py::TestIbdSquash.test_basic
+
+.. code-block:: bash
+
+    pytest tests/test_tspop.py::TestIbdSquash.test_basic
 
 Compiling the documentation
 ---------------------------
@@ -50,6 +76,6 @@ Compiling the documentation
 
 .. code-block:: bash
 
-	cd docs/source
+	cd docs
 	make clean
 	make html
