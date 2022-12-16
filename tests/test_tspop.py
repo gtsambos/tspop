@@ -1,7 +1,8 @@
 
 import tspop
-import msprime
+import msprime, tskit
 import pytest
+import io
 
 # a test tree sequence.
 def sim_ts():
@@ -89,5 +90,53 @@ class TestPlots:
 			width=13,
 			# outfile="myfile.png",
 			)
+
+class TestIbdSquash:
+	"""Tests the method for squashing the IBD segments obtained from
+	tskit.ibd_segments(). (ie. calculates ibd in a 'path-agnostic' way.)"""
+
+	def test_basic(self):
+		#
+		#        4       |      4       |        4
+		#       / \      |     / \      |       / \
+		#      /   \     |    /   3     |      /   \
+		#     /     \    |   2     \    |     /     \
+		#    /       \   |  /       \   |    /       \
+		#   0         1  | 0         1  |   0         1
+		#                |              |
+		#                1.0            2.0            3.0
+		nodes = io.StringIO(
+			"""\
+		id	is_sample	time
+		0	1			0
+		1	1			0
+		2	0			0.5
+		3	0			0.8
+		4	0			1		
+		"""
+		)
+		edges = io.StringIO(
+			"""\
+		left	right	parent	child
+		1.0		2.0		2		0
+		1.0		2.0		3		1
+		0.0		1.0		4		0
+		0.0		1.0		4		1
+		2.0		3.0		4		0
+		2.0		3.0		4		1
+		1.0		2.0		4		2
+		1.0		2.0		4		3
+		"""
+		)
+		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
+		res = ts.ibd_segments(store_segments=True)
+		print(dir(res))
+		print(res.values)
+		sorted_segs = []
+		for s in res[(0,1)]:
+			sorted_segs.append(s)
+		sorted_segs = sorted(sorted_segs)
+
+
 
 
