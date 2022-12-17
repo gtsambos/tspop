@@ -130,12 +130,9 @@ class TestIbdSquash:
 		)
 		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
 		res = ts.ibd_segments(store_segments=True)
-		print(dir(res))
-		print(res.values)
-		sorted_segs = []
-		for s in res[(0,1)]:
-			sorted_segs.append(s)
-		sorted_segs = sorted(sorted_segs)
+		ress = tspop.sort_ibd_segments(res)
+		print(ress)
+
 
 
 

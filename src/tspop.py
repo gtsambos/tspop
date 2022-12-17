@@ -280,3 +280,15 @@ def _plot_ancestry_chunk(row, chrom):
 	chunk = np.array([[l, 0], [r, 0], [r, 1], [l, 1]])
 	chrom.add_patch(Polygon(xy=chunk, color = c))
 
+def sort_ibd_segments(ibd_res):
+	""" Returns a dictionary of sorted ibd segments."""
+	res = {}
+	for k in ibd_res.pairs:
+		segs = []
+		for s in ibd_res[k]:
+			segs.append(s)
+		segs = sorted(segs)
+		res[(k[0], k[1])] = segs
+	return res
+
+
