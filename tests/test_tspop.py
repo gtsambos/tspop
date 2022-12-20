@@ -1,7 +1,9 @@
 
 import tspop
-import msprime, tskit
+import msprime
+import tskit
 import pytest
+import pandas as pd
 import io
 
 # a test tree sequence.
@@ -130,10 +132,73 @@ class TestIbdSquash:
 		)
 		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
 		res = ts.ibd_segments(store_segments=True)
-		ress = tspop.sort_ibd_segments(res)
-		print(ress)
+		ress = tspop.path_agnostic_ibd(res)
+		
+		# Test output is as expected.
+		assert len(ress.keys()) == 1
+		assert isinstance(ress[(0, 1)], pd.DataFrame)
+		ans = pd.DataFrame({
+			'left' : [0.0],
+			'right' : [3.0],
+			'ancestor' : [4]
+		})
+		ans = ans.astype({
+			'left' : float,
+			'right' : float,
+			'ancestor' : int
+			})
+		pd.testing.assert_frame_equal(ress[(0, 1)], ans)
 
+	def test_dont_oversquash(self):
+		#                |              |         5
+		#        4       |      4       |        / 4
+		#       / \      |     / \      |       /   \
+		#      /   \     |    /   \     |      /     3
+		#     /     \    |   2     \    |     /       \
+		#    /       \   |  /       \   |    /         \
+		#   0         1  | 0         1  |   0           1
+		#                |              |
+		#                1.0            2.0             3.0
+		nodes = io.StringIO(
+			"""\
+		id	is_sample	time
+		0	1			0
+		1	1			0
+		2	0			0.5
+		3	0			0.8
+		4	0			1
+		5	0			1.3		
+		"""
+		)
+		edges = io.StringIO(
+			"""\
+		left	right	parent	child
+		1.0		2.0		2		0
+		2.0		3.0		3		1
+		0.0		1.0		4		0
+		0.0		2.0		4		1
+		1.0		2.0		4		2
+		2.0		3.0		4		3
+		2.0		3.0		5		0
+		2.0		3.0		5		4
+		"""
+		)
+		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
+		res = ts.ibd_segments(store_segments=True)
+		ress = tspop.path_agnostic_ibd(res)
 
-
-
+		# Test output is as expected.
+		assert len(ress.keys()) == 1
+		assert isinstance(ress[(0, 1)], pd.DataFrame)
+		ans = pd.DataFrame({
+			'left' : [0.0, 2.0],
+			'right' : [2.0, 3.0],
+			'ancestor' : [4, 5]
+		})
+		ans = ans.astype({
+			'left' : float,
+			'right' : float,
+			'ancestor' : int
+			})
+		pd.testing.assert_frame_equal(ress[(0, 1)], ans)
 

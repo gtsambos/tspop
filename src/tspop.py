@@ -280,6 +280,8 @@ def _plot_ancestry_chunk(row, chrom):
 	chunk = np.array([[l, 0], [r, 0], [r, 1], [l, 1]])
 	chrom.add_patch(Polygon(xy=chunk, color = c))
 
+# IBD-related functions.
+
 def sort_ibd_segments(ibd_res):
 	""" Returns a dictionary of sorted ibd segments."""
 	res = {}
@@ -291,4 +293,35 @@ def sort_ibd_segments(ibd_res):
 		res[(k[0], k[1])] = segs
 	return res
 
+def path_agnostic_ibd(ibd_res):
+	"""Returns a dictionary of squashed IBD segments."""
+	sorted_res = sort_ibd_segments(ibd_res)
 
+	out_dict = {} 
+	for k in sorted_res.keys():
+		new_left = []
+		new_right = []
+		node = []
+
+		segs = sorted_res[k]
+		for i, s in enumerate(segs):
+			if (i > 0 and s.left==new_right[-1] and s.node==node[-1]):
+				new_right[-1] = s.right
+			else:
+				new_left.append(s.left)
+				new_right.append(s.right)
+				node.append(s.node)
+
+		ibd_table = pd.DataFrame({
+			'left' : new_left,
+			'right' : new_right,
+			'ancestor' : node
+		})
+		ibd_table = ibd_table.astype({
+			'left' : float,
+			'right' : float,
+			'ancestor' : int
+			})
+		out_dict[k] = ibd_table
+
+	return out_dict
