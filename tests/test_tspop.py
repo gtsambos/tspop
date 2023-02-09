@@ -32,7 +32,7 @@ def sim_ts():
 	)
 	seq_length = 1e7
 	ts_ex = msprime.sim_ancestry(
-		samples={"SMALL": 0, "BIG": 0, "ADMIX" : 2},
+		samples={"SMALL": 0, "BIG": 0, "ADMIX" : 20},
 		demography=demography,
 		random_seed=1008,
 		sequence_length=seq_length,
@@ -73,13 +73,11 @@ class TestBasicUsage():
 		pop0_lengths = sum(st0.right - st0.left)
 		print(pop0_lengths/self.p.total_genome_length)
 
-	@pytest.mark.xfail
 	def test_ancestry_fraction(self):
 		p0 = self.p.calculate_ancestry_fraction(population=0)
 		p1 = self.p.calculate_ancestry_fraction(population=1)
 		assert pytest.approx(p0 + p1) == 1
 
-	@pytest.mark.xfail
 	def test_ancestry_fraction_sample(self):
 		p0 = self.p.calculate_ancestry_fraction(population=0, sample=2)
 		p1 = self.p.calculate_ancestry_fraction(population=1, sample=2)
@@ -89,7 +87,7 @@ class TestBasicUsage():
 		with pytest.raises(ValueError):
 			self.p.calculate_ancestry_fraction(population=4)
 		with pytest.raises(ValueError):
-			self.p.calculate_ancestry_fraction(population=0, sample=4)
+			self.p.calculate_ancestry_fraction(population=0, sample=40)
 
 
 class TestPlots:
