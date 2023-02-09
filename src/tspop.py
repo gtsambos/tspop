@@ -137,6 +137,35 @@ class PopAncestry(object):
 		lengths = self.squashed_table['right'] - self.squashed_table['left']
 		return np.sum(lengths)
 
+	def calculate_ancestry_fraction(self, population, sample=None):
+		"""
+		Returns the total fraction of genomic material inherited from
+		a given population.
+
+		:arg population: The index of the population to use.
+		:type population: int
+		:arg sample: A specific sample node.
+		:type sample: int
+		:returns: the global ancestry fraction.
+		"""
+		# Subset by population.
+		if (population not in np.unique(self.squashed_table['population'])):
+			raise ValueError("There are no populations with this label in the output.")
+		df = self.squashed_table[self.squashed_table.population == population]
+		
+		# Subset by sample node.
+		if sample is not None:
+			if sample not in np.unique(self.squashed_table['sample']):
+				raise ValueError("This sample node does not appear in the output.")
+			df = df[df['sample'] == sample]
+
+		# Calculate global ancestry fractions.
+		total_coverage = np.sum(df['right'] - df['left'])
+		total_length = len(np.unique(df['sample'])) * self._sequence_length
+		
+		return total_coverage/total_length
+
+
 	def plot_karyotypes(self, sample_pair,
 		colors=None, pop_labels=None, title=None, length_in_Mb=True,
 		outfile=None, height=12, width=20):

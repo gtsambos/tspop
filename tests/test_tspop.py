@@ -8,7 +8,7 @@ import io
 
 # a test tree sequence.
 def sim_ts():
-	census_time = 200.5
+	census_time = 201
 	demography = msprime.Demography()
 	demography.add_population(
 		name="SMALL", initial_size=200)
@@ -45,6 +45,7 @@ class TestBasicUsage():
 	"""Tests the table output."""
 
 	(ts_ex, census_time) = sim_ts()
+	p = tspop.get_pop_ancestry(ts_ex, census_time)
 
 	def test_ancestry_table(self):
 		t = tspop.PopAncestry(
@@ -57,23 +58,38 @@ class TestBasicUsage():
 				left=[0], right=[], population=[], ancestor=[], child=[])
 
 	def test_pop_ancestry(self):
-		p = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
 		print("PopAncestry summary info:")
-		print(p)
+		print(self.p)
 
 	def test_table_output(self):
-		pop_table = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
 		print("Table output:")
-		print(pop_table.squashed_table)
-		print(pop_table.ancestry_table)
+		print(self.p.squashed_table)
+		print(self.p.ancestry_table)
 
 	def test_calculate_global_ancestry(self):
-		pop_table = tspop.get_pop_ancestry(self.ts_ex, self.census_time)
-		st = pop_table.squashed_table
+		st = self.p.squashed_table
 		st0 = st[st.population == 0]
-		print(st0)
+		# print(st0)
 		pop0_lengths = sum(st0.right - st0.left)
-		print(pop0_lengths/pop_table.total_genome_length)
+		print(pop0_lengths/self.p.total_genome_length)
+
+	@pytest.mark.xfail
+	def test_ancestry_fraction(self):
+		p0 = self.p.calculate_ancestry_fraction(population=0)
+		p1 = self.p.calculate_ancestry_fraction(population=1)
+		assert pytest.approx(p0 + p1) == 1
+
+	@pytest.mark.xfail
+	def test_ancestry_fraction_sample(self):
+		p0 = self.p.calculate_ancestry_fraction(population=0, sample=2)
+		p1 = self.p.calculate_ancestry_fraction(population=1, sample=2)
+		assert pytest.approx(p0 + p1) == 1
+
+	def test_ancestry_fraction_errors(self):
+		with pytest.raises(ValueError):
+			self.p.calculate_ancestry_fraction(population=4)
+		with pytest.raises(ValueError):
+			self.p.calculate_ancestry_fraction(population=0, sample=4)
 
 
 class TestPlots:
