@@ -6,6 +6,44 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
+def get_pop_ancestry(ts, census_time):
+	"""
+	Creates a :class:`tspop.PopAncestry` object from a simulated tree sequence containing
+	ancestral census nodes. These are the ancestors that population-based
+	ancestry will be calculated with respect to.
+
+	:param tskit.TreeSequence ts: A tree sequence containing census nodes.
+	:param census_time: The time at which the census nodes are recorded.
+	:type census_time: list(int)
+	:returns: a :class:`tspop.PopAncestry` object
+	"""
+
+	census_nodes = __get_census_nodes(ts, census_time)
+	pop_table = __replace_parents_with_pops(ts, census_nodes)
+	return pop_table
+
+def __get_census_nodes(ts, census_time):
+	census_nodes = [u.id for u in ts.nodes() if u.time == census_time]
+	return census_nodes
+
+def __replace_parents_with_pops(ts, census_nodes):
+	ancestor_table = ts.tables.link_ancestors(
+		samples=ts.samples(), 
+		ancestors=census_nodes
+		)
+		
+	population_ids = ts.tables.nodes.population
+	local_ancestry = PopAncestry(left=ancestor_table.left,
+		right=ancestor_table.right,
+		ancestor=ancestor_table.parent,
+		population=[population_ids[n] for n in ancestor_table.parent],
+		child=ancestor_table.child,
+		sample_nodes=ts.samples(), # May not be in the child field!
+		sequence_length=ts.sequence_length
+	)
+
+	return local_ancestry
+
 class PopAncestry(object):
 	"""
 	In most cases, this should be created with the :meth:`tspop.get_pop_ancestry` method.
@@ -258,44 +296,6 @@ class PopAncestry(object):
 			plt.show()
 		else:
 			plt.savefig(outfile, format='png', facecolor='white')
-
-def get_pop_ancestry(ts, census_time):
-	"""
-	Creates a :class:`tspop.PopAncestry` object from a simulated tree sequence containing
-	ancestral census nodes. These are the ancestors that population-based
-	ancestry will be calculated with respect to.
-
-	:param tskit.TreeSequence ts: A tree sequence containing census nodes.
-	:param census_time: The time at which the census nodes are recorded.
-	:type census_time: list(int)
-	:returns: a :class:`tspop.PopAncestry` object
-	"""
-
-	census_nodes = __get_census_nodes(ts, census_time)
-	pop_table = __replace_parents_with_pops(ts, census_nodes)
-	return pop_table
-
-def __get_census_nodes(ts, census_time):
-	census_nodes = [u.id for u in ts.nodes() if u.time == census_time]
-	return census_nodes
-
-def __replace_parents_with_pops(ts, census_nodes):
-	ancestor_table = ts.tables.link_ancestors(
-		samples=ts.samples(), 
-		ancestors=census_nodes
-		)
-		
-	population_ids = ts.tables.nodes.population
-	local_ancestry = PopAncestry(left=ancestor_table.left,
-		right=ancestor_table.right,
-		ancestor=ancestor_table.parent,
-		population=[population_ids[n] for n in ancestor_table.parent],
-		child=ancestor_table.child,
-		sample_nodes=ts.samples(), # May not be in the child field!
-		sequence_length=ts.sequence_length
-	)
-
-	return local_ancestry
 
 def _plot_ancestry_chunk(row, chrom):
 	l = row.left/seq_length
