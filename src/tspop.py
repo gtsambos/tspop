@@ -312,7 +312,7 @@ def _plot_ancestry_chunk(row, chrom):
 # IBD-related functions.
 
 def sort_ibd_segments(ibd_res):
-	""" Returns a dictionary of sorted ibd segments."""
+	# Returns a dictionary of sorted ibd segments.
 	res = {}
 	for k in ibd_res.pairs:
 		segs = []
@@ -323,7 +323,7 @@ def sort_ibd_segments(ibd_res):
 	return res
 
 def path_agnostic_ibd(ibd_res):
-	"""Returns a dictionary of squashed IBD segments."""
+	# Returns a dictionary of squashed IBD segments.
 	sorted_res = sort_ibd_segments(ibd_res)
 
 	out_dict = {} 
