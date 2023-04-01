@@ -6,7 +6,6 @@
    simulationsetup
    basicusage
    ideas
-   pitfalls
    examples
    tspop
 

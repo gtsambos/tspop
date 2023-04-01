@@ -14,9 +14,9 @@ on whether we are interested in ancestry one or two generations ago.
 By default, ``msprime`` and ``SLiM`` do not retain information about the ancestry of individuals at each timepoint in the simulated history.
 The rest of this page explains how to rectify this.
 
-.. note::
+.. .. note::
 
-	Update this so that the demographic scenario is written in Demes, and then exported to `msprime` and `SLiM`.
+.. 	Update this so that the demographic scenario is written in Demes, and then exported to `msprime` and `SLiM`.
 
 ``msprime`` simulations
 -----------------------
@@ -148,7 +148,7 @@ while the other samples have ancestry with the red population.
 ``SLiM`` simulations
 --------------------
 
-Use a `treeSeqRememberIndividuals()` call to select census individuals.
+Use a ``treeSeqRememberIndividuals()`` call to select census individuals.
 
 .. code-block::
 
@@ -193,7 +193,7 @@ When should you add the census?
 -------------------------------
 
 ``msprime`` simulations
-=======================
+***********************
 
 You should specify the census event at a time when 
 
@@ -214,7 +214,7 @@ Since we are running a (default) coalescent simulation here, condition 3 is unli
 	so a non-integer time is most suitable here.
 
 ``SLiM`` simulations
-====================
+********************
 
-You'll usually want to place the `treeSeqRememberIndividuals()` call in the generation before admixture begins.
+You'll usually want to place the ``treeSeqRememberIndividuals()`` call in the generation before admixture begins.
 

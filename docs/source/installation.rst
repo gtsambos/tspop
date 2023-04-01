@@ -41,12 +41,12 @@ perform the first two steps above, then run the following command:
 
     pip install -e .[dev]
 
-I recommend developing `tspop` in a virtual environment like a ![conda environment](https://conda.io/projects/conda/en/latest/index.html).
+I recommend developing `tspop` in a virtual environment like a [conda environment](https://conda.io/projects/conda/en/latest/index.html).
 
 Running the tests
 -----------------
 
-The test suite uses the ![`pytest`](https://docs.pytest.org/en/7.2.x/) module.
+The test suite uses the [`pytest`](https://docs.pytest.org/en/7.2.x/) module.
 
 .. code-block:: bash
 
