@@ -148,13 +148,52 @@ while the other samples have ancestry with the red population.
 ``SLiM`` simulations
 --------------------
 
-.. note::
+Use a `treeSeqRememberIndividuals()` call to select census individuals.
 
-	Export above example to SLiM.
+.. code-block::
+
+	initialize() {
+		initializeTreeSeq();
+		initializeMutationRate(0);
+		initializeMutationType("m1", 0.5, "f", 0.0);
+		initializeGenomicElementType("g1", m1, 1.0);
+		initializeGenomicElement(g1, 0, 99999);
+		initializeRecombinationRate(3e-8);
+	}
+	1 early() {
+		sim.addSubpop("p3", 500); // "ANC"
+	}
+	1000 early() {
+		sim.addSubpop("p0", 500); // "RED"
+		sim.addSubpop("p1", 500); // "BLUE"
+		p0.setMigrationRates(p3, 1.0);
+		p1.setMigrationRates(p3, 1.0);
+		p3.setSubpopulationSize(0);
+	}
+	1899 late() {
+		// The 'census' event:
+		// note these individuals have time 101 in the output
+		sim.treeSeqRememberIndividuals(sim.subpopulations.individuals);
+	}
+	1900 early() {
+		sim.addSubpop("p2", 500); // "ADMIX"
+		p2.setMigrationRates(c(p0, p1), c(0.5, 0.5));
+	}
+	1901 early() {
+		// admixture happens in a single generation
+		p2.setMigrationRates(c(p0, p1), c(0, 0));
+	}
+	2000 late() {
+		sim.treeSeqOutput("slim.trees");	
+	}
+
 
 
 When should you add the census?
 -------------------------------
+
+``msprime`` simulations
+=======================
 
 You should specify the census event at a time when 
 
@@ -173,3 +212,9 @@ Since we are running a (default) coalescent simulation here, condition 3 is unli
 	Condition 3 is most important when you are running a DTWF simulation.
 	In this situation, you want to avoid placing the census nodes 'on top' of the existing ancestors that are generated at discrete times,
 	so a non-integer time is most suitable here.
+
+``SLiM`` simulations
+====================
+
+You'll usually want to place the `treeSeqRememberIndividuals()` call in the generation before admixture begins.
+
