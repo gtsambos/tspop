@@ -202,6 +202,53 @@ class PopAncestry(object):
 		total_length = len(np.unique(df['sample'])) * self._sequence_length
 		
 		return total_coverage/total_length
+	
+	def subset_tables(self, subset_samples, inplace=False):
+		"""
+		Subsets the ancestry table and squashed table by sample.
+		Note: by default this returns a copy of the original tables.
+		To overwrite the original tables, set inplace=True.
+		(In this case, the function returns nothing).
+
+		:param subset_samples: The sample nodes to keep.
+		:type subset_samples: list(int)
+		:param inplace: Whether to overwrite the original tables.
+		:type inplace: bool
+		:returns: The subsetted ancestry table and squashed table (only if `inplace=True`).
+		"""
+
+		# Subset the ancestry table.
+		ancestry_table = self.ancestry_table.loc[self.ancestry_table['sample'].isin(subset_samples)]
+
+		# Subset the squashed table.
+		squashed_table = self.squashed_table.loc[self.squashed_table['sample'].isin(subset_samples)]
+		
+		if inplace:
+			self.squashed_table = squashed_table
+
+		if not inplace:
+			self.ancestry_table = ancestry_table
+			return ancestry_table, squashed_table
+	
+	def ancestry_table_write_csv(self, outfile, **kwargs):
+		"""
+		Writes the ancestry table to a csv file.
+
+		param outfile: The name of the output file.
+		type: str
+		param kwargs: other keyword arguments for pandas.to_csv
+		"""
+		self.ancestry_table.to_csv(outfile, **kwargs)
+
+	def squashed_table_write_csv(self, outfile, **kwargs):
+		"""
+		Writes the squashed table to a csv file.
+
+		param outfile: The name of the output file.
+		type: str
+		param kwargs: other keyword arguments for pandas.to_csv
+		"""
+		self.squashed_table.to_csv(outfile, **kwargs)
 
 
 	def plot_karyotypes(self, sample_pair,
@@ -309,9 +356,7 @@ def _plot_ancestry_chunk(row, chrom):
 	chunk = np.array([[l, 0], [r, 0], [r, 1], [l, 1]])
 	chrom.add_patch(Polygon(xy=chunk, color = c))
 
-# IBD-related functions.
-
-def sort_ibd_segments(ibd_res):
+def _sort_ibd_segments(ibd_res):
 	# Returns a dictionary of sorted ibd segments.
 	res = {}
 	for k in ibd_res.pairs:
@@ -322,7 +367,7 @@ def sort_ibd_segments(ibd_res):
 		res[(k[0], k[1])] = segs
 	return res
 
-def path_agnostic_ibd(ibd_res):
+def _path_agnostic_ibd(ibd_res):
 	# Returns a dictionary of squashed IBD segments.
 	sorted_res = sort_ibd_segments(ibd_res)
 

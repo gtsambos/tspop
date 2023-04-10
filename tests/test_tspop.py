@@ -89,6 +89,11 @@ class TestBasicUsage():
 		with pytest.raises(ValueError):
 			self.p.calculate_ancestry_fraction(population=0, sample=40)
 
+	def test_subset_tables(self):
+		a, s = self.p.subset_tables(subset_samples=[0, 1])
+		assert len(set(a['sample'])) == 2
+		assert len(set(s['sample'])) == 2
+	
 
 class TestPlots:
 	"""Tests karyotype plotting."""
@@ -146,7 +151,7 @@ class TestIbdSquash:
 		)
 		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
 		res = ts.ibd_segments(store_segments=True)
-		ress = tspop.path_agnostic_ibd(res)
+		ress = tspop._path_agnostic_ibd(res)
 		
 		# Test output is as expected.
 		assert len(ress.keys()) == 1
@@ -199,7 +204,7 @@ class TestIbdSquash:
 		)
 		ts = tskit.load_text(nodes=nodes, edges=edges, strict=False)
 		res = ts.ibd_segments(store_segments=True)
-		ress = tspop.path_agnostic_ibd(res)
+		ress = tspop._path_agnostic_ibd(res)
 
 		# Test output is as expected.
 		assert len(ress.keys()) == 1
