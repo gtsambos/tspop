@@ -6,8 +6,8 @@
    simulationsetup
    basicusage
    ideas
-   examples
    tspop
+   changelog
 
 
 About ``tspop``
